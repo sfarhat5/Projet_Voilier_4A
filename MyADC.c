@@ -11,16 +11,18 @@ void My_ADC_Init_Single_Conv( ADC_TypeDef* ADC){
 	RCC -> CFGR |= RCC_CFGR_ADCPRE_DIV6;
 	ADC -> CR2 |= ADC_CR2_ADON; //Activation de l'ADC
 	
-	ADC->SQR1 &=0;
+	ADC->SQR1 =0;//Pour mettre L à 0
 	
 }
 
 int My_ADC_Get_Value( ADC_TypeDef* ADC, int channel) {
+
 	
-	ADC->SQR3 |= channel; 
+	ADC->SQR3 = channel; 
 	ADC -> CR2 |= ADC_CR2_ADON;
 	while (((ADC -> SR) & ADC_SR_EOC) == 0) {} // while end of conversion = 0	
 	ADC -> SR &= ~(ADC_SR_EOC);							 // End of STRT 
 	return (ADC -> DR & 65535); 						 // renvoie les 16 premieres bits de DR
 }
+
 
